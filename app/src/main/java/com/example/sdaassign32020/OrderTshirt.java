@@ -1,8 +1,12 @@
 package com.example.sdaassign32020;
 
-
+import android.app.WallpaperManager;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.text.InputType;
 import android.util.Log;
@@ -17,9 +21,11 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.fragment.app.Fragment;
 
+import java.io.Serializable;
+
+import static android.app.Activity.RESULT_OK;
 
 /*
  * A simple {@link Fragment} subclass.
@@ -27,22 +33,25 @@ import androidx.fragment.app.Fragment;
  */
 public class OrderTshirt extends Fragment {
 
-
     public OrderTshirt() {
         // Required empty public constructor
     }
 
     //class wide variables
-    private String mPhotoPath;
     private Spinner mSpinner;
     private EditText mCustomerName;
     private EditText meditDelivery;
     private ImageView mCameraImage;
     private TextView meditCollection;
+    private boolean setColMessage;
+    private boolean setDelMessage = true;
+    Uri imageUri;
 
     //static keys
     private static final int REQUEST_TAKE_PHOTO = 2;
     private static final String TAG = "OrderTshirt";
+
+    ImageView selectedImage;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,7 +66,7 @@ public class OrderTshirt extends Fragment {
         meditDelivery.setRawInputType(InputType.TYPE_CLASS_TEXT);
         meditCollection = root.findViewById(R.id.editCollect);
 
-        mCameraImage = root.findViewById(R.id.imageView);;
+        mCameraImage = root.findViewById(R.id.imageView);
         Button mSendButton = root.findViewById(R.id.sendButton);
 
         //set a listener on the the camera image
@@ -129,6 +138,34 @@ public class OrderTshirt extends Fragment {
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK && data !=null){
+            Bundle bundle = data.getExtras();
+            Bitmap finalPhoto = (Bitmap) bundle.get("data");
+            mCameraImage.setImageBitmap(finalPhoto);
+
+            BitmapDrawable drawable = (BitmapDrawable) mCameraImage.getDrawable();
+            //imageUri = data.getData();
+            Bitmap bitmap = drawable.getBitmap();
+            //Uri imageUri = data.getData();
+
+            //Bitmap bmap = mCameraImage.getDrawingCache();
+
+            //mCameraImage = root.findViewById(R.id.imageView);
+
+            //ImageView image = findViewById(R.id.imageView);
+            //image.setImageBitmap(finalPhoto);
+
+            //BitmapDrawable drawable = (BitmapDrawable) mCameraImage.getDrawable();
+            //Bitmap bitmap = drawable.getBitmap();
+
+        }
+    }
+
+
+
     /*
      * Returns the Email Body Message, update this to handle either collection or delivery
      */
@@ -136,43 +173,61 @@ public class OrderTshirt extends Fragment {
     {
         String orderMessage = "";
         String deliveryInstruction = meditDelivery.getText().toString();
-        String customerName = getString(R.string.customer_name) + " " + mCustomerName.getText().toString();
+        String customerName = getString(R.string.customer_name) + ": " + mCustomerName.getText().toString();
 
-        orderMessage += customerName + "\n" + "name attached";
+        orderMessage += customerName + "\n" + "\n" + getString(R.string.order_message_1);
 
-        if(deliveryInstruction !=null){
-            orderMessage += "\n" + "Deliver to this address" + deliveryInstruction;
-        } else {
-            orderMessage += "\n" +  "Collect in" + mSpinner.getSelectedItem().toString()+ " days." + "\n";
+        //sets email message content based on the whether the user picks delivery or collection methos
+        if(setDelMessage){
+            orderMessage += "\n" + "Deliver order to this address" + "\n";
+            orderMessage += "\n" + deliveryInstruction + "\n";
+        } else if(setColMessage){
+            orderMessage += "\n" + getString(R.string.order_message_collect) + mSpinner.getSelectedItem().toString() + " days." + "\n";
         }
 
-        orderMessage += "\n" + getString(R.string.order_message_end) + "\n" + mCustomerName.getText().toString();
-
-/*      orderMessage += customerName + "\n" + "\n" + getString(R.string.order_message_1);
-        orderMessage += "\n" + "Deliver my order to the following address: ";
-        orderMessage += "\n" + deliveryInstruction;
-        orderMessage += "\n" + getString(R.string.order_message_collect) + mSpinner.getSelectedItem().toString() + "days";
-        orderMessage += "\n" + getString(R.string.order_message_end) + "\n" + mCustomerName.getText().toString();*/
+        orderMessage += "\n" + "Thanks" + getString(R.string.order_message_end) + "\n" + mCustomerName.getText().toString();
 
         return orderMessage;
     }
 
-    //Update me to send an email
+    //Update to send an email
     private void sendEmail(View v)
     {
         //check that Name is not empty, and ask do they want to continue
         String customerName = mCustomerName.getText().toString();
+        String delAddress = meditDelivery.getText().toString();
         if (mCustomerName == null || customerName.equals(""))
         {
-            Toast.makeText(getContext(), "Please enter your name", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Enter your name, Please", Toast.LENGTH_SHORT).show();
+
+        } else if(setDelMessage == true && (delAddress.equals(null) || delAddress.equals(""))) {
+            Toast.makeText(getContext(),"Enter your address, Please", Toast.LENGTH_SHORT).show();
 
             /* we can also use a dialog
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Notification!").setMessage("Customer Name not set.").setPositiveButton("OK", null).show();*/
 
         } else {
-            Log.d(TAG, "sendEmail: should be sending an email with "+createOrderSummary(v));
+
+            //Bitmap bm=((BitmapDrawable)mCameraImage.getDrawable()).getBitmap();
+            //imageUri = data.getData();
+
+            Intent email = new Intent(Intent.ACTION_SEND);
+            email.putExtra(Intent.EXTRA_EMAIL, new String[]{"glenngarmets@me.ie"});
+            email.putExtra(Intent.EXTRA_SUBJECT, "Order Request");
+            email.putExtra(Intent.EXTRA_TEXT, createOrderSummary(v));
+            //email.putExtra(Intent.EXTRA_STREAM, (Serializable) mCameraImage.getDrawable());
+            //email.putExtra(Intent.EXTRA_STREAM, imageUri);
+            email.setType("image/jpeg");
+
+            // your desired intent with your own parames subject and others
+            // no need to del and others.
+            // this is test in API 19 hope it
+
+            email.setType("message/rfc822");
+            startActivity(Intent.createChooser(email, "Choose an Email client: "));
         }
     }
-
 }
+
+

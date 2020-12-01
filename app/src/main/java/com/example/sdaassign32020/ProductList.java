@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -46,11 +47,19 @@ public class ProductList extends Fragment {
 
         //start it with the view
         Log.d(TAG, "Starting recycler view");
-        RecyclerView recyclerView = root.findViewById(R.id.recyclerView_view);
-        FlavorViewAdapter recyclerViewAdapter = new FlavorViewAdapter(getContext(), mFlavor);
+        final RecyclerView recyclerView = root.findViewById(R.id.recyclerView_view);
+        final FlavorViewAdapter recyclerViewAdapter = new FlavorViewAdapter(getContext(), mFlavor);
         recyclerView.setAdapter(recyclerViewAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         return root;
+/*
+        recyclerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(mFlavor,  ), Toast.LENGTH_LONG).show();
+            }
+        });*/
+
     }
 }
