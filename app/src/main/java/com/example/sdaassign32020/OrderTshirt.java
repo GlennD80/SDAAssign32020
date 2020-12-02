@@ -10,10 +10,13 @@ import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.text.InputType;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,6 +29,7 @@ import androidx.fragment.app.Fragment;
 import java.io.Serializable;
 
 import static android.app.Activity.RESULT_OK;
+
 
 /*
  * A simple {@link Fragment} subclass.
@@ -44,8 +48,9 @@ public class OrderTshirt extends Fragment {
     private ImageView mCameraImage;
     private TextView meditCollection;
     private boolean setColMessage;
-    private boolean setDelMessage = true;
+    private boolean setDelMessage;
     Uri imageUri;
+
 
     //static keys
     private static final int REQUEST_TAKE_PHOTO = 2;
@@ -100,10 +105,12 @@ public class OrderTshirt extends Fragment {
                 if (hasfocus) {
                     disableCollect();
                 } else {
-                    Log.e(TAG, "editDelivery not focused");
+
                 }
             }
         });
+
+        //mSpinner.setOnItemSelectedListener((AdapterView.OnItemSelectedListener) this);
 
         //initialise spinner using the integer array
         mSpinner = root.findViewById(R.id.spinner);
@@ -115,18 +122,19 @@ public class OrderTshirt extends Fragment {
         return root;
     }
 
+
     private void disableCollect() {
         String deliveryInstruction = meditDelivery.getText().toString();
         if(deliveryInstruction != null || !deliveryInstruction.equals(""))
-        //if (deliveryInstruction == null || deliveryInstruction.equals(""))
         {
             meditCollection.setVisibility(View.INVISIBLE);
             mSpinner.setVisibility(View.INVISIBLE);
-            //setCollectionMessage = false;
+            setDelMessage = true;
         } else {
-            Log.d(TAG, "collection option disabled");
+            Log.i(TAG, "onClick: Collection Disabled");
         }
     }
+
 
     //Take a photo note the view is being passed so we can get context because it is a fragment.
     //update this to save the image so it can be sent via email
@@ -135,6 +143,10 @@ public class OrderTshirt extends Fragment {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(v.getContext().getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+
+
+
+
         }
     }
 
@@ -175,17 +187,17 @@ public class OrderTshirt extends Fragment {
         String deliveryInstruction = meditDelivery.getText().toString();
         String customerName = getString(R.string.customer_name) + ": " + mCustomerName.getText().toString();
 
-        orderMessage += customerName + "\n" + "\n" + getString(R.string.order_message_1);
+        orderMessage += customerName + "\n" + "\n" + getString(R.string.order_message_1) + "\n";
 
         //sets email message content based on the whether the user picks delivery or collection methos
-        if(setDelMessage){
-            orderMessage += "\n" + "Deliver order to this address" + "\n";
+        if(setDelMessage == true){
+            orderMessage += "\n" + "Deliver order to this address";
             orderMessage += "\n" + deliveryInstruction + "\n";
-        } else if(setColMessage){
+        } else if (setDelMessage == false){
             orderMessage += "\n" + getString(R.string.order_message_collect) + mSpinner.getSelectedItem().toString() + " days." + "\n";
         }
 
-        orderMessage += "\n" + "Thanks" + getString(R.string.order_message_end) + "\n" + mCustomerName.getText().toString();
+        orderMessage += "\n" + getString(R.string.order_message_end) + "\n" + mCustomerName.getText().toString();
 
         return orderMessage;
     }
@@ -209,20 +221,12 @@ public class OrderTshirt extends Fragment {
 
         } else {
 
-            //Bitmap bm=((BitmapDrawable)mCameraImage.getDrawable()).getBitmap();
-            //imageUri = data.getData();
-
             Intent email = new Intent(Intent.ACTION_SEND);
             email.putExtra(Intent.EXTRA_EMAIL, new String[]{"glenngarmets@me.ie"});
             email.putExtra(Intent.EXTRA_SUBJECT, "Order Request");
             email.putExtra(Intent.EXTRA_TEXT, createOrderSummary(v));
-            //email.putExtra(Intent.EXTRA_STREAM, (Serializable) mCameraImage.getDrawable());
             //email.putExtra(Intent.EXTRA_STREAM, imageUri);
             email.setType("image/jpeg");
-
-            // your desired intent with your own parames subject and others
-            // no need to del and others.
-            // this is test in API 19 hope it
 
             email.setType("message/rfc822");
             startActivity(Intent.createChooser(email, "Choose an Email client: "));
