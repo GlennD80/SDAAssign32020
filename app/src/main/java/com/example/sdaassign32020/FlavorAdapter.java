@@ -23,11 +23,11 @@ package com.example.sdaassign32020;
  */
 public class FlavorAdapter {
 
-    // Name of the Android version (e.g. Gingerbread, Honeycomb, Ice Cream Sandwich)
-    private String mVersionName;
+    // Name of the tee shirt (e.g. Alien, Celtic )
+    private String mShirtName;
 
-    // Android version number (e.g. 2.3-2.7, 3.0-3.2.6, 4.0-4.0.4)
-    private String mVersionNumber;
+    // tee shirt sizes (e.g. S, M, L, XL, XXL)
+    private String mSizeNumber;
 
     // Drawable resource ID
     private int mImageResourceId;
@@ -41,23 +41,23 @@ public class FlavorAdapter {
      * */
     public FlavorAdapter(String vName, String vNumber, int imageResourceId)
     {
-        mVersionName = vName;
-        mVersionNumber = vNumber;
+        mShirtName = vName;
+        mSizeNumber = vNumber;
         mImageResourceId = imageResourceId;
     }
 
     /**
-     * Get the name of the Android version
+     * Get the name of the tee shirt name
      */
-    public String getVersionName() {
-        return mVersionName;
+    public String getName() {
+        return mShirtName;
     }
 
     /**
-     * Get the Android version number
+     * Get the tee shirt size
      */
-    public String getVersionNumber() {
-        return mVersionNumber;
+    public String getNumber() {
+        return mSizeNumber;
     }
 
     /**

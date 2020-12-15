@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -23,9 +24,18 @@ public class ProductList extends Fragment {
 
     private static final String TAG = "RecyclerViewActivity";
     private ArrayList<FlavorAdapter> mFlavor = new ArrayList<>();
+    public AdapterView.OnItemClickListener mListener;
 
     public ProductList() {
         // Required empty public constructor
+    }
+
+    public interface OnItemClickListner {
+        void onItemClick(int position);
+    }
+
+    public void setOnItemClickListener (OnItemClickListner listener) {
+        mListener = (AdapterView.OnItemClickListener) listener;
     }
 
     @Override
@@ -53,13 +63,6 @@ public class ProductList extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         return root;
-/*
-        recyclerView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(mFlavor,  ), Toast.LENGTH_LONG).show();
-            }
-        });*/
 
     }
 }

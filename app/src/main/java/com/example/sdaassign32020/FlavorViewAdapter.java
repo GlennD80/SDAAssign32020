@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,6 +38,7 @@ public class FlavorViewAdapter extends RecyclerView.Adapter<FlavorViewAdapter.Vi
 
     //add array for each item\
     private ArrayList<FlavorAdapter> mFlavors;
+
 
     FlavorViewAdapter(Context mNewContext, ArrayList<FlavorAdapter> mflavor) {
         this.mNewContext = mNewContext;
@@ -55,8 +57,8 @@ public class FlavorViewAdapter extends RecyclerView.Adapter<FlavorViewAdapter.Vi
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int position) {
         Log.d(TAG, "onBindViewHolder: was called");
 
-        viewHolder.imageText.setText(mFlavors.get(position).getVersionNumber());
-        viewHolder.versionText.setText(mFlavors.get(position).getVersionName());
+        viewHolder.imageText.setText(mFlavors.get(position).getNumber());
+        viewHolder.nameText.setText(mFlavors.get(position).getName());
         viewHolder.imageItem.setImageResource(mFlavors.get(position).getImageResourceId());
 
     }
@@ -71,7 +73,7 @@ public class FlavorViewAdapter extends RecyclerView.Adapter<FlavorViewAdapter.Vi
 
         ImageView imageItem;
         TextView imageText;
-        TextView versionText;
+        TextView nameText;
         RelativeLayout itemParentLayout;
 
         ViewHolder(@NonNull View itemView) {
@@ -80,9 +82,19 @@ public class FlavorViewAdapter extends RecyclerView.Adapter<FlavorViewAdapter.Vi
             //grab the image, the text and the layout id's
             imageItem = itemView.findViewById(R.id.imageItem);
             imageText = itemView.findViewById(R.id.flavorText);
-            versionText = itemView.findViewById(R.id.flavorVers);
+            nameText = itemView.findViewById(R.id.flavorVers);
             itemParentLayout = itemView.findViewById(R.id.listItemLayout);
 
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition() +1;
+                    if(position != RecyclerView.NO_POSITION){
+                        Log.d(TAG, "Recycler View Click" + position);
+                        Toast.makeText(mNewContext, "Product Number ID " + position + " " + mFlavors.get(position).getName(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
         }
     }
 }

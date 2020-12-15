@@ -1,22 +1,17 @@
 package com.example.sdaassign32020;
 
-import android.app.WallpaperManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.text.InputType;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,8 +20,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.fragment.app.Fragment;
-
-import java.io.Serializable;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -55,8 +48,6 @@ public class OrderTshirt extends Fragment {
     //static keys
     private static final int REQUEST_TAKE_PHOTO = 2;
     private static final String TAG = "OrderTshirt";
-
-    ImageView selectedImage;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -159,17 +150,14 @@ public class OrderTshirt extends Fragment {
             mCameraImage.setImageBitmap(finalPhoto);
 
             BitmapDrawable drawable = (BitmapDrawable) mCameraImage.getDrawable();
-            //imageUri = data.getData();
             Bitmap bitmap = drawable.getBitmap();
+
+            //imageUri = data.getData();
             //Uri imageUri = data.getData();
-
             //Bitmap bmap = mCameraImage.getDrawingCache();
-
             //mCameraImage = root.findViewById(R.id.imageView);
-
             //ImageView image = findViewById(R.id.imageView);
             //image.setImageBitmap(finalPhoto);
-
             //BitmapDrawable drawable = (BitmapDrawable) mCameraImage.getDrawable();
             //Bitmap bitmap = drawable.getBitmap();
 
