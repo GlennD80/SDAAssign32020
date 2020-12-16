@@ -34,10 +34,16 @@ import static android.app.Activity.RESULT_CANCELED;
 import static android.os.Environment.DIRECTORY_PICTURES;
 //import javax.print.attribute.standard.Media;
 
-
-/*
- * A simple {@link Fragment} subclass.
- * @author Chris Coughlan 2019
+/**
+ * A simple {@link Fragment} subclass. <br>
+ * <p>This fragment class offers a product and a user can send details by email - customer name, picture, and delivery/collection data.
+ * This data is then passed into an email the creates and order summary. </p>
+ *
+ * <p>Adapted from the following resources:
+ *  *        <span margin-left: 40px;>- project folder downloaded for assignment 3 @author Chris Coughlan 2020 </span>
+ *  *         <span margin-left: 40px;> - MediaIntentActivity project from the SDA-2020 repository </span>
+ *  </p>
+ * @author Glenn Dunlop
  */
 public class OrderTshirt extends Fragment {
 
@@ -51,11 +57,9 @@ public class OrderTshirt extends Fragment {
     private EditText meditDelivery;
     private ImageView mCameraImage;
     private TextView meditCollection;
-    private boolean setColMessage;
     private boolean setDelMessage;
     Uri imageUri;
     private File image = null;
-
 
     //static keys
     private static final int REQUEST_TAKE_PHOTO = 2;
@@ -171,7 +175,7 @@ public class OrderTshirt extends Fragment {
             return orderMessage;
         }
     }
-    
+
     /**
      * disable collect spinner and text with onclick
      */
@@ -193,7 +197,6 @@ public class OrderTshirt extends Fragment {
      *     It also creates a places for the image file to be saved</p>
      *     <br>
      * <p>the following code was adapted from the following: <br>
-     *
      */
     //Take a photo note the view is being passed so we can get context because it is a fragment.
     //update this to save the image so it can be sent via email
