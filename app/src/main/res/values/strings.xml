@@ -30,5 +30,10 @@
     <string name="get_the_coolest_most_awesomest_tee_you_have_ever_seen">Get the coolest most awesomest tee you have ever seen</string>
     <string name="teeshirt">teeshirt</string>
     <string name="get_the_coolest_tees_online_design_your_own">Get the Coolest Tees Online, Design your own</string>
+    <string name="send_order">SEND ORDER</string>
+    <string name="enter_your_delivery_address">Enter Your Delivery Address</string>
+    <string name="enter_your_name">Enter Your Name</string>
+    <string name="take_photo_for_t_shirt">Take photo for T-Shirt</string>
+    <string name="or_for_collection_in_days">Or - for Collection in (days)</string>
 
 </resources>

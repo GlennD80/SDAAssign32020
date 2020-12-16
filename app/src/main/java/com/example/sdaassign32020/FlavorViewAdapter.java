@@ -88,7 +88,7 @@ public class FlavorViewAdapter extends RecyclerView.Adapter<FlavorViewAdapter.Vi
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int position = getAdapterPosition() +1;
+                    int position = getAdapterPosition();
                     if(position != RecyclerView.NO_POSITION){
                         Log.d(TAG, "Recycler View Click" + position);
                         Toast.makeText(mNewContext, "Product Number ID " + position + " " + mFlavors.get(position).getName(), Toast.LENGTH_SHORT).show();
